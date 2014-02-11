@@ -1,4 +1,6 @@
 pyfun
 =====
 
-> Binary Trees and other data structures in python
+* Data structures
+* Flask
+* OOPs concepts in python
