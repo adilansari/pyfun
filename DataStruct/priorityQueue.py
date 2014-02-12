@@ -24,7 +24,7 @@ class PriorityQueue(object):
         index = len(self.data) - 1
         pIndex = (index - 1)/2
 
-        while pIndex > 0 and self.data[pIndex] > self.data[index]:
+        while pIndex >= 0 and self.data[index] > self.data[pIndex]:
             self.data[pIndex], self.data[index] = self.data[index], self.data[pIndex]
             index = pIndex
             pIndex = (index - 1)/2
@@ -33,15 +33,15 @@ class PriorityQueue(object):
         self.data[0] = self.data.pop()
         index = 0
 
-        while index *2 <= len(self.data) -1:
-            minIndex = self.__getMinIndex(index)
-            if self.data[minIndex] > self.data[index]:
-                self.data[minIndex], self.data[index] = self.data[index], self.data[minIndex]
-                index = minIndex
+        while index *2 <= len(self.data) -2:
+            maxIndex = self.__getMaxIndex(index)
+            if self.data[maxIndex] > self.data[index]:
+                self.data[maxIndex], self.data[index] = self.data[index], self.data[maxIndex]
+                index = maxIndex
             else:
                 break
 
-    def __getMinIndex(self,i):
+    def __getMaxIndex(self,i):
         lIndex = i*2 +1
         rIndex = lIndex + 1
         
@@ -56,4 +56,12 @@ q = PriorityQueue()
 q.insert(3)
 q.insert(6)
 q.insert(2)
+q.insert(4)
+q.insert(9)
+q.insert(5)
+q.insert(7)
+q.insert(1)
+print q.extractMax()
+print q.extractMax()
+print q.extractMax()
 print q.extractMax()
