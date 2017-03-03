@@ -6,13 +6,12 @@ import time
 # dump this new dict into a csv
 
 
-todays_date = None
+todays_date = time.strftime("%d/%m/%Y")
 
 conf = (
     ('output/gfinance_formatted_trades.csv', ['Symbol', 'Buy Date', 'Buy Quantity', 'Buy Price']),
     ('output/moneycontrol_formatted_trades.csv', ['BSE/NSE/ISIN Code', 'Buy Date', 'Buy Quantity', 'Buy Price'])
 )
-
 
 def convert(input_file):
 
@@ -30,17 +29,10 @@ def _filter_noise(row):
     return {
         'BSE/NSE/ISIN Code': row['Symbol '].strip(),
         'Symbol': 'NSE:' + row['Symbol '].strip(),
-        'Buy Date': _get_todays_date(),
+        'Buy Date': todays_date,
         'Buy Quantity': int(row['Quantity '].strip()),
         'Buy Price': float(row['Price '].strip())
     }
-
-def _get_todays_date():
-    global todays_date
-    if not todays_date:
-        todays_date = time.strftime("%d/%m/%Y")
-
-    return todays_date
 
 if __name__ == "__main__":
     input_file = "input/sample_input.csv"
