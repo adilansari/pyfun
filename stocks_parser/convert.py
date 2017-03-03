@@ -6,10 +6,11 @@ import time
 # dump this new dict into a csv
 
 
-todays_date = time.strftime("%d/%m/%Y")
+mc_todays_date = time.strftime("%d/%m/%Y")
+gf_todays_date = time.strftime("%m/%d/%Y")
 
 conf = (
-    ('output/gfinance_formatted_trades.csv', ['Symbol', 'Buy Date', 'Buy Quantity', 'Buy Price']),
+    ('output/gfinance_formatted_trades.csv', ['Symbol', 'Purchase Date', 'Buy Quantity', 'Buy Price']),
     ('output/moneycontrol_formatted_trades.csv', ['BSE/NSE/ISIN Code', 'Buy Date', 'Buy Quantity', 'Buy Price'])
 )
 
@@ -29,7 +30,8 @@ def _filter_noise(row):
     return {
         'BSE/NSE/ISIN Code': row['Symbol '].strip(),
         'Symbol': 'NSE:' + row['Symbol '].strip(),
-        'Buy Date': todays_date,
+        'Buy Date': mc_todays_date,
+        'Purchase Date': gf_todays_date,
         'Buy Quantity': int(row['Quantity '].strip()),
         'Buy Price': float(row['Price '].strip())
     }
