@@ -37,5 +37,5 @@ def _filter_noise(row):
     }
 
 if __name__ == "__main__":
-    input_file = "input/sample_input.csv"
+    input_file = "input/trade_book.csv"
     convert(input_file)
