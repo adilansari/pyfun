@@ -1,18 +1,10 @@
 import csv
 import time
+from config import *
 
 # read the input file into a dict
 # parse that dict into a new dict only keeping the needed fields
 # dump this new dict into a csv
-
-
-mc_todays_date = time.strftime("%d/%m/%Y")
-gf_todays_date = time.strftime("%m/%d/%Y")
-
-conf = (
-    ('output/gfinance_formatted_trades.csv', ['Symbol', 'Purchase Date', 'Buy Quantity', 'Buy Price']),
-    ('output/moneycontrol_formatted_trades.csv', ['BSE/NSE/ISIN Code', 'Buy Date', 'Buy Quantity', 'Buy Price'])
-)
 
 def convert(input_file):
 
@@ -21,19 +13,20 @@ def convert(input_file):
         output_data = list(map(_filter_noise, reader))
 
 
-    for outfile, fieldnames in conf:
-        with open(outfile, 'w') as output_csv:
-            writer = csv.DictWriter(output_csv, fieldnames=fieldnames, extrasaction='ignore')
+    for key in [GOOGLE_FINANCE, MONEYCONTROL]:
+        conf = CONFIG[key]
+        with open(conf[OUTPUT_FILE], 'w') as output_csv:
+            writer = csv.DictWriter(output_csv, fieldnames=conf[FIELDNAMES], extrasaction='ignore')
             writer.writerows(output_data)
 
 def _filter_noise(row):
     return {
-        'BSE/NSE/ISIN Code': row['Symbol '].strip(),
-        'Symbol': 'NSE:' + row['Symbol '].strip(),
-        'Buy Date': mc_todays_date,
-        'Purchase Date': gf_todays_date,
-        'Buy Quantity': int(row['Quantity '].strip()),
-        'Buy Price': float(row['Price '].strip())
+        CSVKEY_ISIN_CODE: row['Symbol '].strip(),
+        CSVKEY_SYMBOL: 'NSE:' + row['Symbol '].strip(),
+        CSVKEY_PURCHASE_DATE: time.strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
+        CSVKEY_BUY_DATE: time.strftime(CONFIG[MONEYCONTROL][DATE_FORMAT]),
+        CSVKEY_BUY_QTY: int(row['Quantity '].strip()),
+        CSVKEY_BUY_PRICE: float(row['Price '].strip())
     }
 
 if __name__ == "__main__":
