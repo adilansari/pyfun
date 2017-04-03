@@ -9,6 +9,7 @@ input_xlsx_file = 'input/profit_loss_statement.xlsx'
 def convert_xls_to_csv(xlsfile, csvfile):
     os.system('in2csv {} > {}'.format(xlsfile, csvfile))
 
+
 def build_data_store(csvfile):
     clean_buffer = _clean_csv(csvfile)
     fields, data = clean_buffer[0].split(','), clean_buffer[1:]
@@ -28,12 +29,13 @@ def _parse_data(fields, data):
         mapping = dict(zip(fields, d))
         yield _create_struct(mapping)
 
+
 def _create_struct(mapping):
     stock_symbol = STOCK_SYMBOLS[mapping['Name']]
     buy_date = mapping['Purc Date']
     qty = int(mapping['Purc Qty'])
     price_for_all = float(mapping['Purc Value'])
-    price_per = '{0:.2f}'.format(price_for_all/qty)
+    price_per = '{0:.2f}'.format(price_for_all / qty)
     brokerage = '{0:.2f}'.format(float(mapping['Charges']) + float(mapping['STT']))
     return {
         CSVKEY_ISIN_CODE: stock_symbol,
@@ -45,8 +47,10 @@ def _create_struct(mapping):
         CSVKEY_BROKERAGE: brokerage
     }
 
+
 def _clean_csv(csvfile):
     STOCK_NAMES = STOCK_SYMBOLS.keys()
+
     def _is_useful_data(line):
         if 'Gain' in line and 'Charges' in line:
             return True
@@ -58,8 +62,7 @@ def _clean_csv(csvfile):
     with open(csvfile, 'r') as lines:
         return filter(_is_useful_data, lines)
 
+
 if __name__ == '__main__':
     convert_xls_to_csv(input_xlsx_file, input_csv_file)
     build_data_store(input_csv_file)
-
-# build a name => Symbol map iin conf.py

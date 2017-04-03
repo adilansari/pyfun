@@ -7,7 +7,7 @@ FIELDNAMES = 'fieldnames'
 CSVKEY_SYMBOL = 'Symbol'
 CSVKEY_PURCHASE_DATE = 'Purchase Date'
 CSVKEY_BUY_QTY = 'Buy Quantity'
-CSVKEY_BUY_PRICE ='Buy Price'
+CSVKEY_BUY_PRICE = 'Buy Price'
 CSVKEY_BUY_DATE = 'Buy Date'
 CSVKEY_ISIN_CODE = 'BSE/NSE/ISIN Code'
 CSVKEY_BROKERAGE = 'Brokerage'
@@ -38,4 +38,5 @@ STOCK_SYMBOLS = {
     'TATA Steel Limited': 'TATASTEEL',
     'Tata Consultancy Services Ltd': 'TCS',
     'Tech Mahindra Limited': 'TECHM',
+    'JSW Steel': 'JSWSTEEL',
 }
