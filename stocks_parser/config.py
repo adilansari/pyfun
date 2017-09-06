@@ -1,5 +1,6 @@
 GOOGLE_FINANCE = 'gfinance'
 MONEYCONTROL = 'moneycontrol'
+VALUE_RESEARCH = 'value_research'
 DATE_FORMAT = 'date_format'
 OUTPUT_FILE = 'outfile'
 FIELDNAMES = 'fieldnames'
@@ -11,6 +12,8 @@ CSVKEY_BUY_PRICE = 'Buy Price'
 CSVKEY_BUY_DATE = 'Buy Date'
 CSVKEY_ISIN_CODE = 'BSE/NSE/ISIN Code'
 CSVKEY_BROKERAGE = 'Brokerage'
+CSVKEY_TRANSACTION_TYPE = 'Transaction Type'
+CSVKEY_TOTAL_AMOUNT = 'Total Amount'
 
 CONFIG = {
     GOOGLE_FINANCE: {
@@ -22,6 +25,11 @@ CONFIG = {
         DATE_FORMAT: '%d/%m/%Y',
         OUTPUT_FILE: 'output/moneycontrol_formatted_trades.csv',
         FIELDNAMES: [CSVKEY_ISIN_CODE, CSVKEY_BUY_DATE, CSVKEY_BUY_QTY, CSVKEY_BUY_PRICE]
+    },
+    VALUE_RESEARCH: {
+        DATE_FORMAT: '%d/%m/%Y',
+        OUTPUT_FILE: 'output/valueresearch_formatted_trades.csv',
+        FIELDNAMES: [CSVKEY_ISIN_CODE, CSVKEY_PURCHASE_DATE, CSVKEY_BUY_QTY, CSVKEY_BUY_PRICE, CSVKEY_BROKERAGE, CSVKEY_TRANSACTION_TYPE, CSVKEY_TOTAL_AMOUNT]
     }
 }
 
@@ -39,4 +47,11 @@ STOCK_SYMBOLS = {
     'Tata Consultancy Services Ltd': 'TCS',
     'Tech Mahindra Limited': 'TECHM',
     'JSW Steel': 'JSWSTEEL',
+    'Larsen & Toubro': 'LT',
+    'Sun Pharmaceutical': 'SUNPHARMA',
+    'Tata Motors': 'TATAMOTORS',
+    'Ramco Cements': 'RAMCOCEM',
+    'DLF Ltd': 'DLF',
+    'Housing Development': 'HDIL',
+    'Mahindra': 'M&M'
 }

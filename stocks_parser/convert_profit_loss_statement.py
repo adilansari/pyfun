@@ -4,9 +4,10 @@ from config import *
 from datetime import datetime
 
 input_csv_file = 'input/profit_loss_statement.csv'
-input_xlsx_file = 'input/profit_loss_statement.xlsx'
+input_xlsx_file = 'input/profit_loss_statement.xls'
 STOCK_NAMES = STOCK_SYMBOLS.keys()
 
+# TODO: Value research date format, value research xls, cross verify with unit count
 
 def convert_xls_to_csv(xlsfile, csvfile):
     os.system('ssconvert {} {}'.format(xlsfile, csvfile))
@@ -60,7 +61,7 @@ def _extract_stock_name(line):
 def generate_output_csv(filtered_data):
     csv_buffer = map(_create_struct, filtered_data)
 
-    for key in [GOOGLE_FINANCE, MONEYCONTROL]:
+    for key in [GOOGLE_FINANCE, MONEYCONTROL, VALUE_RESEARCH]:
         conf = CONFIG[key]
         with open(conf[OUTPUT_FILE], 'w') as output_csv:
             writer = csv.DictWriter(output_csv, fieldnames=conf[FIELDNAMES], extrasaction='ignore')
@@ -71,14 +72,18 @@ def generate_output_csv(filtered_data):
 def _create_struct(mapping):
     stock_symbol = mapping['symbol']
     brokerage = '{0:.2f}'.format(float(mapping['charges']) + float(mapping['stt']))
+    qty = int(mapping['qty'])
+    price_per = float(mapping['price_per'])
     return {
         CSVKEY_ISIN_CODE: stock_symbol,
         CSVKEY_SYMBOL: 'NSE:' + stock_symbol,
         CSVKEY_PURCHASE_DATE: mapping['date'].strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
         CSVKEY_BUY_DATE: mapping['date'].strftime(CONFIG[MONEYCONTROL][DATE_FORMAT]),
-        CSVKEY_BUY_QTY: int(mapping['qty']),
-        CSVKEY_BUY_PRICE: float(mapping['price_per']),
-        CSVKEY_BROKERAGE: brokerage
+        CSVKEY_BUY_QTY: qty,
+        CSVKEY_BUY_PRICE: price_per,
+        CSVKEY_BROKERAGE: brokerage,
+        CSVKEY_TRANSACTION_TYPE: 'Purchase',
+        CSVKEY_TOTAL_AMOUNT: float("{0:.2f}".format(qty * price_per))
     }
 
 
