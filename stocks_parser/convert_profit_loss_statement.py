@@ -1,5 +1,6 @@
 import os
 import csv
+import xlsxwriter
 from config import *
 from datetime import datetime
 
@@ -12,6 +13,16 @@ STOCK_NAMES = STOCK_SYMBOLS.keys()
 def convert_xls_to_csv(xlsfile, csvfile):
     os.system('ssconvert {} {}'.format(xlsfile, csvfile))
 
+def convert_csv_to_xls(csvfile):
+    wb = xlsxwriter.Workbook(csvfile.replace('.csv', '.xls'))
+    ws = wb.add_worksheet("WS1")
+    with open(csvfile, 'r') as input_csv:
+        table = csv.reader(input_csv)
+        i = 0
+        for row in table:
+            ws.write_row(i, 0, row)
+            i += 1
+    wb.close()
 
 def build_data_store(csvfile):
     data_store = []
@@ -61,12 +72,15 @@ def _extract_stock_name(line):
 def generate_output_csv(filtered_data):
     csv_buffer = map(_create_struct, filtered_data)
 
-    for key in [GOOGLE_FINANCE, MONEYCONTROL, VALUE_RESEARCH]:
+    for key in [MONEYCONTROL, GOOGLE_FINANCE, VALUE_RESEARCH]:
         conf = CONFIG[key]
         with open(conf[OUTPUT_FILE], 'w') as output_csv:
             writer = csv.DictWriter(output_csv, fieldnames=conf[FIELDNAMES], extrasaction='ignore')
             writer.writeheader()
             writer.writerows(csv_buffer)
+
+        if key == VALUE_RESEARCH:
+            convert_csv_to_xls(conf[OUTPUT_FILE])
 
 
 def _create_struct(mapping):
@@ -76,14 +90,17 @@ def _create_struct(mapping):
     price_per = float(mapping['price_per'])
     return {
         CSVKEY_ISIN_CODE: stock_symbol,
-        CSVKEY_SYMBOL: 'NSE:' + stock_symbol,
-        CSVKEY_PURCHASE_DATE: mapping['date'].strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
+        CSVKEY_SYMBOL: stock_symbol,
         CSVKEY_BUY_DATE: mapping['date'].strftime(CONFIG[MONEYCONTROL][DATE_FORMAT]),
+        CSVKEY_PURCHASE_DATE: mapping['date'].strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
+        CSVKEY_DATE: mapping['date'].strftime(CONFIG[VALUE_RESEARCH][DATE_FORMAT]),
         CSVKEY_BUY_QTY: qty,
+        CSVKEY_UNITS: qty,
         CSVKEY_BUY_PRICE: price_per,
         CSVKEY_BROKERAGE: brokerage,
         CSVKEY_TRANSACTION_TYPE: 'Purchase',
-        CSVKEY_TOTAL_AMOUNT: float("{0:.2f}".format(qty * price_per))
+        CSVKEY_TOTAL_AMOUNT: float("{0:.2f}".format(qty * price_per)),
+        CSVKEY_AMOUNT: float("{0:.2f}".format(qty * price_per))
     }
 
 
