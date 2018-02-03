@@ -28,30 +28,28 @@ def build_data_store(csvfile):
     data_store = []
 
     with open(csvfile, 'r') as lines:
-        cached_stock_name = ''
         for line in lines:
-            stock_name = _extract_stock_name(line)
-            if stock_name:
-                cached_stock_name = stock_name
+            stock_symbol = _extract_stock_symbol(line)
+            if not stock_symbol:
                 continue
-            data = line.split(',')
-            date = _extract_date(data[4])
-            if not date:
+            purchase_data = _extract_stock_info(stock_symbol, line)
+            if not purchase_data:
                 continue
-            data_store.append(_extract_stock_info(cached_stock_name, data))
-            cached_stock_name = ''
-
+            data_store.append(purchase_data)
     return data_store
 
 
-def _extract_stock_info(stock_name, array):
+def _extract_stock_info(stock_symbol, line):
     temp_buffer = dict()
-    temp_buffer['symbol'] = stock_name
-    temp_buffer['date'] = _extract_date(array[4])
-    temp_buffer['qty'] = int(array[5])
-    temp_buffer['price_per'] = float(array[6])
-    temp_buffer['charges'] = float(array[15])
-    temp_buffer['stt'] = float(array[21])
+    array = line.split(',')
+    temp_buffer['symbol'] = stock_symbol
+    temp_buffer['date'] = datetime.strptime('2018/02/02', '%Y/%d/%m')
+    temp_buffer['qty'] = int(array[3])
+    if not temp_buffer['qty']:
+        return None
+    temp_buffer['price_per'] = float(array[4])/temp_buffer['qty']
+    temp_buffer['charges'] = float(array[11])
+    temp_buffer['stt'] = float(array[12])
     return temp_buffer
 
 
@@ -62,7 +60,7 @@ def _extract_date(date_string):
         return None
 
 
-def _extract_stock_name(line):
+def _extract_stock_symbol(line):
     for name, symbol in STOCK_SYMBOLS.items():
         if name in line:
             return symbol
@@ -72,6 +70,10 @@ def _extract_stock_name(line):
 def generate_output_csv(filtered_data):
     csv_buffer = map(_create_struct, filtered_data)
 
+    # display total quantity and amount
+    print 'Total quantity: ', sum(entry[CSVKEY_BUY_QTY] for entry in csv_buffer)
+    print 'Total Amount: ', sum(entry[CSVKEY_AMOUNT] for entry in csv_buffer)
+
     for key in [MONEYCONTROL, GOOGLE_FINANCE, VALUE_RESEARCH]:
         conf = CONFIG[key]
         with open(conf[OUTPUT_FILE], 'w') as output_csv:
@@ -79,6 +81,7 @@ def generate_output_csv(filtered_data):
             writer.writeheader()
             writer.writerows(csv_buffer)
 
+        # convert output_csv to xls ... nothing much
         if key == VALUE_RESEARCH:
             convert_csv_to_xls(conf[OUTPUT_FILE])
 

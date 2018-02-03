@@ -56,5 +56,7 @@ STOCK_SYMBOLS = {
     'Ramco Cements': 'RAMCOCEM',
     'DLF Ltd': 'DLF',
     'Housing Development': 'HDIL',
-    'Mahindra': 'M&M'
+    'Mahindra': 'M&M',
+    'NBCC': 'NBCC',
+    'InterGlobe': 'INDIGO'
 }
