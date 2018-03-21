@@ -13,6 +13,7 @@ STOCK_NAMES = STOCK_SYMBOLS.keys()
 def convert_xls_to_csv(xlsfile, csvfile):
     os.system('ssconvert {} {}'.format(xlsfile, csvfile))
 
+
 def convert_csv_to_xls(csvfile):
     wb = xlsxwriter.Workbook(csvfile.replace('.csv', '.xls'))
     ws = wb.add_worksheet("WS1")
@@ -23,6 +24,7 @@ def convert_csv_to_xls(csvfile):
             ws.write_row(i, 0, row)
             i += 1
     wb.close()
+
 
 def build_data_store(csvfile):
     data_store = []
@@ -43,7 +45,7 @@ def _extract_stock_info(stock_symbol, line):
     temp_buffer = dict()
     array = line.split(',')
     temp_buffer['symbol'] = stock_symbol
-    temp_buffer['date'] = datetime.strptime('2018/02/02', '%Y/%d/%m')
+    temp_buffer['date'] = datetime.strptime('2018/01/03', '%Y/%d/%m')
     temp_buffer['qty'] = int(array[3])
     if not temp_buffer['qty']:
         return None
