@@ -1,0 +1,1 @@
+- Return sold artist frequency per country.
