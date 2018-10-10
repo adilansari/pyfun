@@ -1,11 +1,15 @@
-from app import app
+from abc import ABCMeta, abstractproperty
 
 
 class Model(object):
-    def __init__(self):
+    __metaclass__ = ABCMeta
+
+    @abstractproperty
+    def table_name(self):
         pass
 
     def query_db(self, query, args=(), one=False):
+        from app import app
         cur = app.db.get_db().execute(query, args)
         rv = cur.fetchall()
         cur.close()

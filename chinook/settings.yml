@@ -1,2 +1,0 @@
-database:
-  - destination: "dump/chinook.db"

@@ -1,5 +1,5 @@
-from models.db import DB
 from config import Config, TestConfig
+from db import DB
 
 
 class App(object):
