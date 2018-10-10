@@ -15,4 +15,7 @@ class App(object):
             return Config
 
 
-app = App('prod')
+import os
+
+env = os.environ.get('app_env')
+app = App(env)
