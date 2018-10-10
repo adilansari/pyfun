@@ -6,6 +6,7 @@ from datetime import datetime
 
 input_csv_file = 'input/profit_loss_statement.csv'
 input_xlsx_file = 'input/profit_loss_statement.xls'
+
 STOCK_NAMES = STOCK_SYMBOLS.keys()
 
 # TODO: Value research date format, value research xls, cross verify with unit count
@@ -45,7 +46,7 @@ def _extract_stock_info(stock_symbol, line):
     temp_buffer = dict()
     array = line.split(',')
     temp_buffer['symbol'] = stock_symbol
-    temp_buffer['date'] = datetime.strptime('2018/01/03', '%Y/%d/%m')
+    temp_buffer['date'] = datetime.strptime('2018/11/07', '%Y/%d/%m')
     temp_buffer['qty'] = int(array[3])
     if not temp_buffer['qty']:
         return None

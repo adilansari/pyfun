@@ -1,13 +1,15 @@
 import os
 import csv
+import re
 import xlsxwriter
 from config import *
 from datetime import datetime
 
-input_csv_file = 'input/profit_loss_statement.csv'
+input_csv_file = 'input/contract_note.csv'
 input_xlsx_file = 'input/profit_loss_statement.xls'
 
 STOCK_NAMES = STOCK_SYMBOLS.keys()
+DATE_REGEX = r'[0-2][0-9]\/[0-1][0-9]\/20[1-2][0-9]'
 
 # TODO: Value research date format, value research xls, cross verify with unit count
 
@@ -29,15 +31,21 @@ def convert_csv_to_xls(csvfile):
 
 def build_data_store(csvfile):
     data_store = []
+    trade_date = ''
 
     with open(csvfile, 'r') as lines:
         for line in lines:
+            if 'Trade Date' in line:
+                trade_date = _extract_date(line)
+                continue
+
             stock_symbol = _extract_stock_symbol(line)
             if not stock_symbol:
                 continue
             purchase_data = _extract_stock_info(stock_symbol, line)
             if not purchase_data:
                 continue
+            purchase_data['date'] = trade_date
             data_store.append(purchase_data)
     return data_store
 
@@ -46,19 +54,19 @@ def _extract_stock_info(stock_symbol, line):
     temp_buffer = dict()
     array = line.split(',')
     temp_buffer['symbol'] = stock_symbol
-    temp_buffer['date'] = datetime.strptime('2018/11/07', '%Y/%d/%m')
-    temp_buffer['qty'] = int(array[3])
+    temp_buffer['qty'] = int(array[6])
     if not temp_buffer['qty']:
         return None
-    temp_buffer['price_per'] = float(array[4])/temp_buffer['qty']
-    temp_buffer['charges'] = float(array[11])
-    temp_buffer['stt'] = float(array[12])
+    temp_buffer['price_per'] = float(array[8])
+    temp_buffer['charges'] = float(array[9]) * temp_buffer['qty']
+    temp_buffer['stt'] = 0
     return temp_buffer
 
 
-def _extract_date(date_string):
+def _extract_date(line):
     try:
-        return datetime.strptime(date_string, "%Y/%d/%m")
+        date_string = re.findall(DATE_REGEX, line)[0]
+        return datetime.strptime(date_string, "%d/%m/%Y")
     except ValueError:
         return None
 
@@ -75,6 +83,7 @@ def generate_output_csv(filtered_data):
 
     # display total quantity and amount
     print 'Total quantity: ', sum(entry[CSVKEY_BUY_QTY] for entry in csv_buffer)
+    print 'Total brokerage: ', sum(entry[CSVKEY_BROKERAGE] for entry in csv_buffer)
     print 'Total Amount: ', sum(entry[CSVKEY_AMOUNT] for entry in csv_buffer)
 
     for key in [MONEYCONTROL, GOOGLE_FINANCE, VALUE_RESEARCH]:
@@ -91,7 +100,7 @@ def generate_output_csv(filtered_data):
 
 def _create_struct(mapping):
     stock_symbol = mapping['symbol']
-    brokerage = '{0:.2f}'.format(float(mapping['charges']) + float(mapping['stt']))
+    brokerage = float('{0:.2f}'.format(float(mapping['charges']) + float(mapping['stt'])))
     qty = int(mapping['qty'])
     price_per = float(mapping['price_per'])
     return {
@@ -111,6 +120,5 @@ def _create_struct(mapping):
 
 
 if __name__ == '__main__':
-    convert_xls_to_csv(input_xlsx_file, input_csv_file)
     extracted_data = build_data_store(input_csv_file)
     generate_output_csv(extracted_data)
