@@ -10,7 +10,7 @@ class Model(object):
         pass
 
     @abstractproperty
-    def get_all_columns(self):
+    def columns(self):
         pass
 
     def query_db(self, query, args=(), one=False):

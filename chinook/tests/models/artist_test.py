@@ -4,6 +4,9 @@ from tests import BaseTest
 
 class ArtistTest(BaseTest):
 
+    def test_column_count(self):
+        self.assertEquals(len(artist.columns), 2)
+
     def test_table_name(self):
         self.assertEquals(artist.table_name, 'artists')
 
