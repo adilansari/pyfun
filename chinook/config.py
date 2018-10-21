@@ -9,6 +9,3 @@ class TestConfig(Config):
     DEBUG = True
     TESTING = True
 
-
-
-

@@ -18,4 +18,4 @@ class App(object):
 import os
 
 env = os.environ.get('app_env')
-app = App(env)
+app = App('test')
