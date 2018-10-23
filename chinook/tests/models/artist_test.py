@@ -1,4 +1,4 @@
-from models import artist
+from models import artist, Artist
 from tests import BaseTest
 
 
@@ -14,4 +14,6 @@ class ArtistTest(BaseTest):
         self.assertEquals(artist.count(), 275)
 
     def test_get_artist(self):
-        self.assertIn('Led Zeppelin', artist.get_artist(22))
+        result = artist.get_artist(22)
+        self.assertIn('Led Zeppelin', result.name)
+        self.assertEquals(22, result.artist_id)
