@@ -1,5 +1,5 @@
 class Config:
-    DATABASE_URI = '/Users/reoxy/onebox/pyfun/chinook/dump/chinook.db'
+    DATABASE_URI = '/Users/reoxy/onebox/pyfun/chinook/dump/movies.db'
     DEBUG = False
     TESTING = False
 

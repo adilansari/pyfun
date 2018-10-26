@@ -2,7 +2,7 @@ import os
 import unittest
 from shutil import copyfile
 
-DB_FILE = '/Users/reoxy/onebox/pyfun/chinook/dump/chinook.db'
+DB_FILE = '/Users/reoxy/onebox/pyfun/chinook/dump/movies.db'
 TEST_DB_FILE = '/Users/reoxy/onebox/pyfun/chinook/tests/dump/test.db'
 
 
