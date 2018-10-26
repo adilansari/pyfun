@@ -8,7 +8,7 @@ class ArtistTest(BaseTest):
         self.assertEquals(len(artist.columns), 2)
 
     def test_table_name(self):
-        self.assertEquals(artist.table_name, 'artists')
+        self.assertEquals(artist.table_name(), 'artists')
 
     def test_get_artist_count(self):
         self.assertEquals(artist.count(), 275)
