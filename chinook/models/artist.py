@@ -14,6 +14,9 @@ class Artist(Model):
     def columns(self):
         return [self.artist_id, self.name]
 
+    def parse_row(self, row):
+        pass
+
     def get_artist(self, id):
         return self.get_one(self.columns, gen_filter_param(Artist.artist_id), id)
 
