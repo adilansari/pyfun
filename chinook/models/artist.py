@@ -6,8 +6,8 @@ class Artist(Model):
     artist_id = 'ArtistId'
     name = 'Name'
 
-    @property
-    def table_name(self):
+    @classmethod
+    def table_name(cls):
         return 'artists'
 
     @property

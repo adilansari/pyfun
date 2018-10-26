@@ -5,9 +5,9 @@ from app import app
 class Model(object):
     __metaclass__ = ABCMeta
 
-    @abstractproperty
-    def table_name(self):
-        pass
+    @classmethod
+    def table_name(cls):
+        raise NotImplementedError('Table name is needed')
 
     @abstractproperty
     def columns(self):
@@ -22,7 +22,7 @@ class Model(object):
     def get_one(self, cols_to_get, columns_filter, args):
         cols = ', '.join(cols_to_get)
         args = [args] if not type(args) == list else args
-        query = '''SELECT {} FROM {} WHERE {}'''.format(cols, self.table_name, columns_filter)
+        query = '''SELECT {} FROM {} WHERE {}'''.format(cols, self.table_name(), columns_filter)
         return self.query_db(query, args, True)
 
     def get_many(self):
@@ -35,7 +35,7 @@ class Model(object):
         pass
 
     def count(self):
-        query = '''SELECT COUNT(*) FROM {}'''.format(self.table_name)
+        query = '''SELECT COUNT(*) FROM {}'''.format(self.table_name())
         return int(self.query_db(query, one=True)[0])
 
 
