@@ -13,6 +13,10 @@ class Model(object):
     def columns(self):
         pass
 
+    @abstractmethod
+    def parse_row(self, row):
+        pass
+
     def query_db(self, query, args=(), one=False):
         cur = app.db.get_db().execute(query, args)
         rv = cur.fetchall()
