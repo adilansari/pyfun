@@ -1,4 +1,5 @@
-from model import Model, gen_cols_to_get
+from model import Model
+from models import Actor
 
 
 class Movie(Model):
@@ -34,8 +35,8 @@ class Movie(Model):
             self.metacritic_score,
         ]
 
-    @property
-    def table_name(self):
+    @classmethod
+    def table_name(cls):
         return 'movies'
 
     def parse_row(self, row):
@@ -47,9 +48,29 @@ class Movie(Model):
         return movie
 
     def longest_running(self):
-        query = '''SELECT {} FROM {} ORDER BY {} DESC LIMIT 1'''.format(
-            gen_cols_to_get(self.columns),
-            self.table_name,
+        query = '''SELECT * FROM {} ORDER BY {} DESC LIMIT 1'''.format(
+            Movie.table_name(),
             self.runtime
         )
+        return self.parse_row(self.query_db(query, one=True))
+
+    def movie_with_most_actors(self):
+        query = '''SELECT * from {} INNER JOIN
+            (
+                SELECT {}, COUNT({}) as movies_count from {}
+                GROUP BY {}
+                ORDER BY movies_count DESC
+                LIMIT 1
+            ) AS most_actors
+            ON
+            {} = most_actors.{}'''.format(
+            Movie.table_name(),
+            Actor.movie_id,
+            Actor.id,
+            Actor.table_name(),
+            Actor.movie_id,
+            self.id,
+            Actor.movie_id
+        )
+
         return self.parse_row(self.query_db(query, one=True))

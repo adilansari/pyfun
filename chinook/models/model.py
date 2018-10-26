@@ -6,9 +6,9 @@ from os import sys
 class Model(object):
     __metaclass__ = ABCMeta
 
-    @abstractproperty
-    def table_name(self):
-        pass
+    @classmethod
+    def table_name(cls):
+        raise NotImplementedError('table_name not present')
 
     @abstractproperty
     def columns(self):

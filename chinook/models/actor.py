@@ -11,9 +11,18 @@ class Actor(Model):
     def columns(self):
         pass
 
-    @property
-    def table_name(self):
+    @classmethod
+    def table_name(cls):
         return 'actors'
 
     def parse_row(self, row):
         pass
+
+
+        '''
+        select * 
+from movies
+inner join
+(select movie_id, count(id) as movies_count from actors group by movie_id order by movies_count desc limit 1) as xp
+on
+movies.id = xp.movie_id;'''
