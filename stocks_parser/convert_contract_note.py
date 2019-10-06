@@ -86,7 +86,7 @@ def generate_output_csv(filtered_data):
     print 'Total brokerage: ', sum(entry[CSVKEY_BROKERAGE] for entry in csv_buffer)
     print 'Total Amount: ', sum(entry[CSVKEY_AMOUNT] for entry in csv_buffer)
 
-    for key in [MONEYCONTROL, GOOGLE_FINANCE, VALUE_RESEARCH]:
+    for key in [MONEYCONTROL, VALUE_RESEARCH]:
         conf = CONFIG[key]
         with open(conf[OUTPUT_FILE], 'w') as output_csv:
             writer = csv.DictWriter(output_csv, fieldnames=conf[FIELDNAMES], extrasaction='ignore')
@@ -107,7 +107,7 @@ def _create_struct(mapping):
         CSVKEY_ISIN_CODE: stock_symbol,
         CSVKEY_SYMBOL: stock_symbol,
         CSVKEY_BUY_DATE: mapping['date'].strftime(CONFIG[MONEYCONTROL][DATE_FORMAT]),
-        CSVKEY_PURCHASE_DATE: mapping['date'].strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
+        # CSVKEY_PURCHASE_DATE: mapping['date'].strftime(CONFIG[GOOGLE_FINANCE][DATE_FORMAT]),
         CSVKEY_DATE: mapping['date'].strftime(CONFIG[VALUE_RESEARCH][DATE_FORMAT]),
         CSVKEY_BUY_QTY: qty,
         CSVKEY_UNITS: qty,

@@ -1,4 +1,3 @@
-GOOGLE_FINANCE = 'gfinance'
 MONEYCONTROL = 'moneycontrol'
 VALUE_RESEARCH = 'value_research'
 DATE_FORMAT = 'date_format'
@@ -19,11 +18,6 @@ CSVKEY_TOTAL_AMOUNT = 'Total Amount'
 CSVKEY_AMOUNT = 'Amount'
 
 CONFIG = {
-    GOOGLE_FINANCE: {
-        DATE_FORMAT: '%m/%d/%Y',
-        OUTPUT_FILE: 'output/gfinance_formatted_trades.csv',
-        FIELDNAMES: [CSVKEY_SYMBOL, CSVKEY_PURCHASE_DATE, CSVKEY_BUY_QTY, CSVKEY_BUY_PRICE, CSVKEY_BROKERAGE]
-    },
     MONEYCONTROL: {
         DATE_FORMAT: '%d/%m/%Y',
         OUTPUT_FILE: 'output/moneycontrol_formatted_trades.csv',
@@ -37,11 +31,12 @@ CONFIG = {
 }
 
 STOCK_SYMBOLS = {
+    'Adani Ports': 'ADANIPORTS',
     'Bajaj Auto Ltd': 'BAJAJ-AUTO',
-    'Bharat Petroleum Corporation Ltd': 'BPCL',
+    'Bharat Petroleum Corporation': 'BPCL',
     'Cipla Ltd': 'CIPLA',
     'Dr Reddys Laboratories Ltd': 'DRREDDY',
-    'Hindustan Petroleum Corporation Ltd': 'HINDPETRO',
+    'Hindustan Petroleum Corporation': 'HINDPETRO',
     'Hindustan Unilever Ltd': 'HINDUNILVR',
     'Infosys Ltd.': 'INFY',
     'ITC Ltd': 'ITC',
