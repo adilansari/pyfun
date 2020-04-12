@@ -36,7 +36,7 @@ STOCK_SYMBOLS = {
     'Bharat Petroleum Corporation': 'BPCL',
     'Cipla Ltd': 'CIPLA',
     'Dr Reddys Laboratories Ltd': 'DRREDDY',
-    'Hindustan Petroleum Corporation': 'HINDPETRO',
+    'Hindustan Petroleum': 'HINDPETRO',
     'Hindustan Unilever Ltd': 'HINDUNILVR',
     'Infosys Ltd.': 'INFY',
     'ITC Ltd': 'ITC',

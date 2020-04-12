@@ -54,11 +54,12 @@ def _extract_stock_info(stock_symbol, line):
     temp_buffer = dict()
     array = line.split(',')
     temp_buffer['symbol'] = stock_symbol
-    temp_buffer['qty'] = int(array[6])
+    buy_index = array.index('Buy')
+    temp_buffer['qty'] = int(array[buy_index + 1])
     if not temp_buffer['qty']:
         return None
-    temp_buffer['price_per'] = float(array[8])
-    temp_buffer['charges'] = float(array[9]) * temp_buffer['qty']
+    temp_buffer['price_per'] = float(array[buy_index + 3])
+    temp_buffer['charges'] = float(array[buy_index + 4]) * temp_buffer['qty']
     temp_buffer['stt'] = 0
     return temp_buffer
 
@@ -79,12 +80,13 @@ def _extract_stock_symbol(line):
 
 
 def generate_output_csv(filtered_data):
-    csv_buffer = map(_create_struct, filtered_data)
+    csv_buffer = list(map(_create_struct, filtered_data))
 
     # display total quantity and amount
-    print 'Total quantity: ', sum(entry[CSVKEY_BUY_QTY] for entry in csv_buffer)
-    print 'Total brokerage: ', sum(entry[CSVKEY_BROKERAGE] for entry in csv_buffer)
-    print 'Total Amount: ', sum(entry[CSVKEY_AMOUNT] for entry in csv_buffer)
+    print('Total quantity: ', sum(entry[CSVKEY_BUY_QTY] for entry in csv_buffer))
+    print('Total brokerage: ', sum(entry[CSVKEY_BROKERAGE] for entry in csv_buffer))
+    print('Total Amount: ', sum(entry[CSVKEY_AMOUNT] for entry in csv_buffer))
+    print('Total transactions: ', len(filtered_data))
 
     for key in [MONEYCONTROL, VALUE_RESEARCH]:
         conf = CONFIG[key]
